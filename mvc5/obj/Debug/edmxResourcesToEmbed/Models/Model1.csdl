@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="mvcModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Cours">
+    <Key>
+      <PropertyRef Name="cid" />
+    </Key>
+    <Property Name="cid" Type="Int32" Nullable="false" />
+    <Property Name="coursename" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="dexam1" Type="DateTime" Precision="0" />
+    <Property Name="room1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="dexam2" Type="DateTime" Precision="0" />
+    <Property Name="room2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Lecturers" Relationship="Self.FK_Lecturer_Courses" FromRole="Courses" ToRole="Lecturer" />
+    <NavigationProperty Name="Schedules" Relationship="Self.FK_Schedule_Courses" FromRole="Courses" ToRole="Schedule" />
+    <NavigationProperty Name="Students" Relationship="Self.FK_Students_Courses" FromRole="Courses" ToRole="Students" />
+  </EntityType>
+  <EntityType Name="Lecturer">
+    <Key>
+      <PropertyRef Name="lid" />
+      <PropertyRef Name="username" />
+    </Key>
+    <Property Name="lid" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="username" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="firstname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="lastname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="password" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="cid" Type="Int32" />
+    <NavigationProperty Name="Cours" Relationship="Self.FK_Lecturer_Courses" FromRole="Lecturer" ToRole="Courses" />
+  </EntityType>
+  <EntityType Name="Schedule">
+    <Key>
+      <PropertyRef Name="day" />
+      <PropertyRef Name="starthour" />
+      <PropertyRef Name="endhour" />
+      <PropertyRef Name="room" />
+    </Key>
+    <Property Name="day" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="starthour" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="endhour" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="room" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="cid" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Cours" Relationship="Self.FK_Schedule_Courses" FromRole="Schedule" ToRole="Courses" />
+  </EntityType>
+  <EntityType Name="Student">
+    <Key>
+      <PropertyRef Name="sid" />
+      <PropertyRef Name="username" />
+      <PropertyRef Name="cid" />
+    </Key>
+    <Property Name="sid" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="username" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="firstname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="lastname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="password" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="cid" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Cours" Relationship="Self.FK_Students_Courses" FromRole="Students" ToRole="Courses" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Lecturer_Courses">
+    <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
+    <End Role="Lecturer" Type="Self.Lecturer" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Courses">
+        <PropertyRef Name="cid" />
+      </Principal>
+      <Dependent Role="Lecturer">
+        <PropertyRef Name="cid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Schedule_Courses">
+    <End Role="Courses" Type="Self.Cours" Multiplicity="1" />
+    <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Courses">
+        <PropertyRef Name="cid" />
+      </Principal>
+      <Dependent Role="Schedule">
+        <PropertyRef Name="cid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Students_Courses">
+    <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
+    <End Role="Students" Type="Self.Student" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Courses">
+        <PropertyRef Name="cid" />
+      </Principal>
+      <Dependent Role="Students">
+        <PropertyRef Name="cid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="mvcEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Courses" EntityType="Self.Cours" />
+    <EntitySet Name="Lecturers" EntityType="Self.Lecturer" />
+    <EntitySet Name="Schedules" EntityType="Self.Schedule" />
+    <EntitySet Name="Students" EntityType="Self.Student" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <AssociationSet Name="FK_Lecturer_Courses" Association="Self.FK_Lecturer_Courses">
+      <End Role="Courses" EntitySet="Courses" />
+      <End Role="Lecturer" EntitySet="Lecturers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Schedule_Courses" Association="Self.FK_Schedule_Courses">
+      <End Role="Courses" EntitySet="Courses" />
+      <End Role="Schedule" EntitySet="Schedules" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Students_Courses" Association="Self.FK_Students_Courses">
+      <End Role="Courses" EntitySet="Courses" />
+      <End Role="Students" EntitySet="Students" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

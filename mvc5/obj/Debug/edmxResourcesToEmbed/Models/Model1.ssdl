@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="mvcModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Courses">
+    <Key>
+      <PropertyRef Name="cid" />
+    </Key>
+    <Property Name="cid" Type="int" Nullable="false" />
+    <Property Name="coursename" Type="nvarchar" MaxLength="50" />
+    <Property Name="dexam1" Type="date" />
+    <Property Name="room1" Type="nvarchar" MaxLength="50" />
+    <Property Name="dexam2" Type="date" />
+    <Property Name="room2" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Lecturer">
+    <Key>
+      <PropertyRef Name="lid" />
+      <PropertyRef Name="username" />
+    </Key>
+    <Property Name="lid" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="username" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="firstname" Type="nchar" MaxLength="10" />
+    <Property Name="lastname" Type="nchar" MaxLength="10" />
+    <Property Name="password" Type="nchar" MaxLength="10" />
+    <Property Name="Email" Type="nchar" MaxLength="10" />
+    <Property Name="cid" Type="int" />
+  </EntityType>
+  <EntityType Name="Schedule">
+    <Key>
+      <PropertyRef Name="day" />
+      <PropertyRef Name="starthour" />
+      <PropertyRef Name="endhour" />
+      <PropertyRef Name="room" />
+    </Key>
+    <Property Name="day" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="starthour" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="endhour" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="room" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="cid" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Students">
+    <Key>
+      <PropertyRef Name="sid" />
+      <PropertyRef Name="username" />
+      <PropertyRef Name="cid" />
+    </Key>
+    <Property Name="sid" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="username" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="firstname" Type="nchar" MaxLength="10" />
+    <Property Name="lastname" Type="nchar" MaxLength="10" />
+    <Property Name="password" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="Email" Type="nchar" MaxLength="10" />
+    <Property Name="cid" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_Lecturer_Courses">
+    <End Role="Courses" Type="Self.Courses" Multiplicity="0..1" />
+    <End Role="Lecturer" Type="Self.Lecturer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Courses">
+        <PropertyRef Name="cid" />
+      </Principal>
+      <Dependent Role="Lecturer">
+        <PropertyRef Name="cid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Schedule_Courses">
+    <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
+    <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Courses">
+        <PropertyRef Name="cid" />
+      </Principal>
+      <Dependent Role="Schedule">
+        <PropertyRef Name="cid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Students_Courses">
+    <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
+    <End Role="Students" Type="Self.Students" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Courses">
+        <PropertyRef Name="cid" />
+      </Principal>
+      <Dependent Role="Students">
+        <PropertyRef Name="cid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="mvcModelStoreContainer">
+    <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Lecturer" EntityType="Self.Lecturer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Students" EntityType="Self.Students" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Lecturer_Courses" Association="Self.FK_Lecturer_Courses">
+      <End Role="Courses" EntitySet="Courses" />
+      <End Role="Lecturer" EntitySet="Lecturer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Schedule_Courses" Association="Self.FK_Schedule_Courses">
+      <End Role="Courses" EntitySet="Courses" />
+      <End Role="Schedule" EntitySet="Schedule" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Students_Courses" Association="Self.FK_Students_Courses">
+      <End Role="Courses" EntitySet="Courses" />
+      <End Role="Students" EntitySet="Students" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

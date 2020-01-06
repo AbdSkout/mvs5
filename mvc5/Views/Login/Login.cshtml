@@ -1,0 +1,34 @@
+﻿@model mvc5.Models.Login
+@{
+    ViewBag.Title = "Login";
+}
+<h2>Login</h2>
+
+<body >
+
+    <form action="sumbit" method="post">
+        
+        <div class="container">
+
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="username" >@Html.ValidationMessageFor(x => x.user_name)
+            <br />
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" >@Html.ValidationMessageFor(x => x.password)
+            <br />
+            <br />
+            <button type="submit">Login</button>
+
+        </div>
+
+       
+    </form>
+    
+
+
+
+
+
+
+
+</body>
